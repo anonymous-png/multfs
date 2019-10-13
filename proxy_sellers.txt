@@ -1,0 +1,19 @@
+crimebb=> SELECT "Username", "IdMember", "Site" FROM "Member" WHERE "Username" LIKE '%shopsocks5%' OR "Username" LIKE '%dichvusocks%' OR "Username" LIKE 'vn5socks';
+    Username    | IdMember  | Site
+----------------+-----------+------
+ shopsocks5     | 121388512 |   12
+ dichvusocks    |   2721173 |    0
+ dichvusocks    | 121381191 |   12
+ vn5socks       | 121355415 |   12
+ shopsocks5     |    311713 |   10
+ dichvusocks    |    310868 |   10
+ shopsocks5     |   3750623 |    0
+ shopsocks5com  |   3991569 |    0
+ dichvusocks    |      8020 |    5
+ dichvusocks.us |      9640 |    5
+ vn5socks       |     51959 |   13
+ shopsocks5.com |     52689 |   13
+ dichvusocks    |     85617 |   13
+ shopsocks5.com |     31601 |    3
+ dichvusocks.us |     32368 |    3
+(15 rows)

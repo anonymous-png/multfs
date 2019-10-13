@@ -1,0 +1,17 @@
+*.pyc
+*.csv
+*.dat
+*.pickle
+*.pkl
+*.pdf
+*.png
+*.csv
+db_credentials.py
+__pycache__/
+link_files/
+btc_files/
+ip_files/
+email_files/
+skype_files/
+Author/
+coincidences/
