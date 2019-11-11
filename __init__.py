@@ -141,7 +141,7 @@ def calculate_feature_scores_dont(lst_fs, dont):
 		print("[+] Finished with: %s in %d seconds" %(fs.identifier(), time.time() - tic))
 
 
-def caculate_combinations(args, dont, filename=None):
+def calculate_combinations(args, dont, filename=None):
 	multfs = MultFS("combined_results.csv")
 	for key in args.keys():
 		if not (key in dont):
@@ -550,39 +550,40 @@ def main():
 	elif sys.argv[1] == 'alternative':
 		print("[>>] Creating datasets for all except link.")
 		
-		#create_directories_and_datasets_1()
+		create_directories_and_datasets_1()
 
 		dont = [('link', True)]
 		do = [('skype', False), ('email', False), ('btc', False), ('ip', True)]
 
 		filename = None if len(sys.argv) < 3 else sys.argv[2]
 		lst_fs = generate_feature_scores(args)
-		#calculate except link
+		# calculate except link
 
-		# lst_ps = []
-		# print("[>>] Creating dataset for link")
-		# #pskype = mp.Process(target=create_directories_and_datasets_2)
-		# #pskype.start()
+		lst_ps = []
+		print("[>>] Creating dataset for link")
+		pskype = mp.Process(target=create_directories_and_datasets_2)
+		pskype.start()
 
-		# print("[>>] Computing the rest of feature scores")
-		# for feature in do:
-		# 	p = mp.Process(target=calculate_feature_score, args=(lst_fs, feature[0], feature[1]))
-		# 	p.start()
-		# 	lst_ps.append(p)
+		print("[>>] Computing the rest of feature scores")
+		for feature in do:
+			p = mp.Process(target=calculate_feature_score, args=(lst_fs, feature[0], feature[1]))
+			p.start()
+			lst_ps.append(p)
 
-		# for p in lst_ps:
-		# 	p.join()
+		for p in lst_ps:
+			p.join()
 
 		#Generate combinations only
-		caculate_combinations(args, [x[0] for x in dont], filename)
+		calculate_combinations(args, [x[0] for x in do], filename)
 		
-		#pskype.join()
+		pskype.join()
 		calculate_feature_scores_dont(lst_fs, [x[0] for x in dont])
 
 		os.remove("combined_results.csv")
 		os.remove("normalized_combined_results.csv")
 		
 		calculate_multfs_score(args, filename)
+		return
 		final_process_1 = mp.Process(target=get_coincidences, args=(lst_fs,))
 		final_process_1.start()
 		final_process_2 = mp.Process(target=generate_directories_for_users)

@@ -8,7 +8,7 @@ def extract_user_to_link_csv(filename):
 	query= """WITH "A" AS (SELECT
   		CAST("Post"."Author" AS text) || '[' || CAST("Post"."Site" AS text) || ']' as "Author",
   		regexp_matches( "Content", '(http[s]?://(?:[a-zA-Z]|[0-9]|[$-\)+-Z^-_@.&+]|[!\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)', 'g') AS "link"
-  		FROM "Post" WHERE ("Site" != 4 OR "CitedPost"[1] = -1) AND "Content" ~ '(http[s]?://(?:[a-zA-Z]|[0-9]|[$-\)+-Z^-_@.&+]|[!\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)'),
+  		FROM "Post" WHERE "Content" ~ '(http[s]?://(?:[a-zA-Z]|[0-9]|[$-\)+-Z^-_@.&+]|[!\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)'),
 		"B" AS (SELECT "Author", lower("link"[1]) as "link", count(*) as "repetitions" FROM "A" GROUP BY "Author", "link" )
 		SELECT "B"."Author",
 		string_agg("B"."link", ', ') as "reps" 
@@ -25,7 +25,7 @@ def extract_user_to_ip_csv(filename):
 	query= """WITH "A" AS (SELECT
 		CAST("Post"."Author" AS text) || '[' || CAST("Post"."Site" AS text) || ']' as "Author",
 		regexp_matches( "Content", '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)', 'g') AS "ip"
-		FROM "Post"	WHERE ("Site" != 4 OR "CitedPost"[1] = -1) AND "Content" ~ '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'),
+		FROM "Post"	WHERE "Content" ~ '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'),
 		"B" AS (SELECT "Author", "ip", count(*) as "repetitions" FROM "A" GROUP BY "Author", "ip" )
 		SELECT "B"."Author",
 		string_agg("B"."ip"[1] || '.' ||"B"."ip"[2] || '.' ||"B"."ip"[3]|| '.' ||"B"."ip"[4], ', ') as "reps" 
@@ -41,7 +41,7 @@ def extract_user_to_email_csv(filename):
 	query= """WITH "A" AS (SELECT
   		CAST("Post"."Author" AS text) || '[' || CAST("Post"."Site" AS text) || ']' as "Author",
   		regexp_matches( "Content", '(?:(?![*]))([A-Za-z0-9\._%-\)\+]+@[A-Za-z0-9\.-]+[.][A-Za-z]+)', 'g') AS "email"
-  		FROM "Post" WHERE ("Site" != 4 OR "CitedPost"[1] = -1) AND "Content" ~ '(?:(?![*]))([A-Za-z0-9\._%-\)\+]+@[A-Za-z0-9\.-]+[.][A-Za-z]+)'),
+  		FROM "Post" WHERE "Content" ~ '(?:(?![*]))([A-Za-z0-9\._%-\)\+]+@[A-Za-z0-9\.-]+[.][A-Za-z]+)'),
 		"B" AS (SELECT "Author", lower("email"[1]) as "email", count(*) as "repetitions" FROM "A" GROUP BY "Author", "email" )
 		SELECT "B"."Author",
 		string_agg("B"."email", ', ') as "reps" 
@@ -64,7 +64,7 @@ def extract_user_to_skype_csv(filename):
 	query= """WITH "A" AS (SELECT
   		CAST("Post"."Author" AS text) || '[' || CAST("Post"."Site" AS text) || ']' as "Author", 
   		regexp_matches( "Content", 'skype\s*:\s*([a-zA-Z0-9:\.]{1,37})', 'g') AS "skype"
-  		FROM "Post" WHERE ("Site" != 4 OR "CitedPost"[1] = -1) AND "Content" ~ 'skype\s*:\s*([a-zA-Z0-9:\.]{1,37})'),
+  		FROM "Post" WHERE "Content" ~ 'skype\s*:\s*([a-zA-Z0-9:\.]{1,37})'),
 		"B" AS (SELECT "Author", lower("skype"[1]) as "skype", count(*) as "repetitions" FROM "A" GROUP BY "Author", "skype" )
 		SELECT "B"."Author",
 		string_agg("B"."skype", ', ') as "reps" 
@@ -88,8 +88,8 @@ def extract_user_to_btc_csv(filename):
 	query= """WITH "A" AS (SELECT
   		CAST("Post"."Author" AS text) || '[' || CAST("Post"."Site" AS text) || ']' as "Author",
   		regexp_matches( "Content", '\y([13][a-km-zA-HJ-NP-Z1-9]{25,34})\y', 'g') AS "btc"
-  		FROM "Post" WHERE ("Site" != 4 OR "CitedPost"[1] = -1) AND "Content" ~ '([13][a-km-zA-HJ-NP-Z1-9]{25,34})'),
-		"B" AS (SELECT "Author", lower("btc"[1]) as "btc", count(*) as "repetitions" FROM "A" GROUP BY "Author", "btc" )
+  		FROM "Post" WHERE "Content" ~ '([13][a-km-zA-HJ-NP-Z1-9]{25,34})'),
+		"B" AS (SELECT "Author", "btc"[1] as "btc", count(*) as "repetitions" FROM "A" GROUP BY "Author", "btc" )
 		SELECT "B"."Author",
 		string_agg("B"."btc", ', ') as "reps" 
 		FROM "B" GROUP BY "B"."Author";"""

@@ -17,7 +17,7 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords 
 from random import shuffle
-from common_utils import gen_csv_from_tuples, read_csv_list, make_query, file_len, notify_mail
+from common_utils import gen_csv_from_tuples, read_csv_list, make_query, file_len
 
 import pandas as pd
 import networkx as nx
