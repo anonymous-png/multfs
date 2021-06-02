@@ -76,7 +76,7 @@ traitlets==4.3.2
 Twisted==19.7.0
 ufw==0.35
 unattended-upgrades==0.1
-urllib3==1.24.3
+urllib3==1.26.5
 virtualenv==16.4.3
 wcwidth==0.1.7
 wrangle==0.6.2
